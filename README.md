@@ -7,3 +7,9 @@ There are several areas of the world where there are vast quantities of salt in 
 
 ## Data
 The data is a set of images chosen at various locations chosen at random in the subsurface. The images are 101 x 101 pixels and each pixel is classified as either salt or sediment. In addition to the seismic images, the depth of the imaged location is provided for each image. The goal of the competition is to segment regions that contain salt.
+
+
+## Approach
+The input image size was (101,101). So I have resized the image to (128,128). The image augmentation includes Flipping the images and corresponding mask , random crop and resize , 10 degree rotation and rolling the images. The training data was spliited into 5 folds and in each fold a neural network was used. The architecture of neural network was Resnet with unet. The resnet block was inspired from this paper : [Identity Mappings in Deep Residual Networks](https://arxiv.org/pdf/1603.05027.pdf).
+
+For each fold the neural net was trained with 80 epochs and 64 batch size with binary cross entropy loss and after that 80 epochs and 64 batch size with Lovasz Loss.  For total 160 epochs, model was observed using model checkpoint in keras and only saved the weights for which the validaition IoU increased. The test data augmentation include flipping the images. 
